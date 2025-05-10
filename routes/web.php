@@ -18,10 +18,10 @@ $router->get('/', function () use ($router) {
 });
 
 // Get comments for a specific post
-$router->get('/posts/{postId}/comment', 'CommentController@getComments');
+$router->get('/posts/{postId}/comments', 'CommentController@getComments');
 
 // Comment routes
-$router->post('/posts/{postId}/comment', 'CommentController@addComment');  // To add a comment to a post
-$router->post('/comment/{commentId}/reply', 'CommentController@replyToComment');  // To reply to a comment
+$router->post('/posts/{postId}/comments', 'CommentController@addComment');  // To add a comment to a post
+$router->post('/comments/{commentId}/reply', 'CommentController@replyToComment');  // To reply to a comment
 
-$router->get('/comment/{commentId}/replies', 'CommentController@getReplies');
+$router->get('/comments/{commentId}/replies', 'CommentController@getReplies');
