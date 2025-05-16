@@ -13,6 +13,8 @@
 |
 */
 
+// app/routes/web.php
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
@@ -20,8 +22,15 @@ $router->get('/', function () use ($router) {
 // Get comments for a specific post
 $router->get('/posts/{postId}/comments', 'CommentController@getComments');
 
-// Comment routes
-$router->post('/posts/{postId}/comments', 'CommentController@addComment');  // To add a comment to a post
-$router->post('/comments/{commentId}/reply', 'CommentController@replyToComment');  // To reply to a comment
+// Add a comment to a post
+$router->post('/posts/{postId}/comments', 'CommentController@addComment');  // Ensure this route is here
 
+// Reply to a comment
+$router->post('/comments/{commentId}/reply', 'CommentController@replyToComment'); 
+
+// Get replies for a comment
 $router->get('/comments/{commentId}/replies', 'CommentController@getReplies');
+
+// Test model
+$router->get('/test-comment', 'CommentController@testModel');
+

@@ -8,6 +8,9 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
+use Fruitcake\Cors\HandleCors;
+
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -27,13 +30,20 @@ $app->withFacades();
 
 $app->withEloquent();
 
+// Manually load the CORS config
+$app->configure('cors');
+
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Origin, Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    exit(0);
+if (php_sapi_name() !== 'cli') {
+    // Only run this if it's not from the command line
+    $method = $_SERVER['REQUEST_METHOD'];
+    // your routing logic here
 }
+
 
 
 /*
@@ -81,13 +91,18 @@ $app->configure('app');
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+    Fruitcake\Cors\HandleCors::class,
+]);
+
+$app->middleware([
+    App\Http\Middleware\ExampleMiddleware::class
+]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
+
 
 /*
 |--------------------------------------------------------------------------

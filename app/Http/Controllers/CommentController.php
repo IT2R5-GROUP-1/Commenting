@@ -2,37 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Comment;
-use App\Post;
 use Illuminate\Http\Request;
+use App\Models\Comment;
+use App\Models\Post;
+
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
     // Add comment to a post
-public function addComment($postId, Request $request)
-{
-    $post = Post::findOrFail($postId);
-
-    $validator = Validator::make($request->all(), [
-        'text' => 'required|string',
-        'username' => 'nullable|string|max:255', // ← Add this line
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 422);
+    public function addComment($postId, Request $request)
+    {
+        $comment = new Comment();
+        $comment->post_id = $postId;
+        $comment->username = $request->input('username');
+        $comment->text = $request->input('text');
+        $comment->save();
+    
+        return response()->json($comment, 201);
     }
-
-    $comment = new Comment();
-    $comment->username = $request->username ?? 'User_' . substr(md5(rand()), 0, 9); // ← Use passed username or fallback
-    $comment->text = $request->text;
-    $comment->post_id = $post->id;
-
-    $comment->save();
-
-    return response()->json($comment, 201);
-}
-
+    
 
     // Reply to a comment
 public function replyToComment($commentId, Request $request)
@@ -77,6 +66,9 @@ public function getReplies($commentId)
     return response()->json($replies);
 }
 
+public function testModel() {
+    dd(\App\Models\Comment::all());
+}
 
 
 }
